@@ -1,0 +1,610 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap');
+
+/* 1. Define a modern color palette and base styles */
+:root {
+  --page-bg: #f6f6f7; /* Shopify-like light gray */
+  --card-bg: #ffffff;
+  --text-primary: #202223; /* Shopify's primary text */
+  --text-secondary: #6d7175;
+  --border-color: #e1e3e5;
+  --brand: #2f9e44; /* Keep the green as the brand accent */
+  --brand-dark: #2b8a3e;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --radius: 12px;
+}
+
+body {
+  background-color: var(--page-bg);
+  /* Subtle background gradient for depth */
+  background-image: radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 0.03) 0, transparent 50%),
+                    radial-gradient(at 100% 0%, hsla(240, 24%, 7%, 0.03) 0, transparent 50%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text-primary);
+}
+
+/* 2. Modernize Typography - remove heavy slab font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px; /* Tighter letter-spacing for Inter */
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.25rem; font-weight: 600; }
+h3 { font-size: 1.1rem; font-weight: 600; }
+
+/* 3. Redesign Cards to be the primary UI surface */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 4. Redesign Form Elements */
+.form-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.form-control, .form-select-sm {
+  background-color: var(--card-bg);
+  border: 1px solid #c9cccf;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.form-control:focus, .form-select-sm:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(47, 158, 68, 0.15);
+  outline: 0;
+}
+
+/* Add brand color to primary button for consistency */
+.btn-primary {
+  background-color: var(--brand);
+  border-color: var(--brand);
+}
+.btn-primary:hover {
+  background-color: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+/* 5. Modernize Tabs */
+.nav-tabs {
+  border-bottom: 2px solid var(--border-color);
+}
+.nav-tabs .nav-item {
+  margin-bottom: -2px; /* Align active border with bottom border */
+}
+.nav-tabs .nav-link {
+  border: 0;
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 0.5rem 0;
+  margin: 0 1rem;
+}
+.nav-tabs .nav-link:first-child {
+  margin-left: 0;
+}
+.nav-tabs .nav-link.active {
+  color: var(--text-primary);
+  background-color: transparent;
+  border-bottom: 2px solid var(--brand);
+}
+.nav-tabs .nav-link:hover {
+  color: var(--text-primary);
+}
+
+/* --- New Welcome Page Styles --- */
+.top-nav {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.nav-logo {
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-actions .btn {
+  border-radius: 999px; /* pill shape */
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+}
+
+.hero-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 4rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.hero-actions .btn-primary, .hero-actions .btn-secondary {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.hero-actions .btn-secondary {
+  background-color: var(--page-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+.hero-actions .btn-secondary:hover {
+  background-color: #e9ecef;
+}
+
+.hero-mockup {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+  padding: 1rem;
+  transform: perspective(1500px) rotateY(-15deg) rotateX(5deg);
+  transition: transform 0.3s ease;
+}
+.hero-mockup:hover {
+  transform: perspective(1500px) rotateY(0deg) rotateX(0deg);
+}
+
+.mockup-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 1rem;
+}
+.mockup-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.mockup-dot.red { background-color: #ff5f56; }
+.mockup-dot.yellow { background-color: #ffbd2e; }
+.mockup-dot.green { background-color: #27c93f; }
+
+/* --- Onboarding & Question Flow --- */
+.question-flow-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 75px); /* Viewport height minus nav height */
+  padding: 2rem;
+}
+
+.question-flow-content {
+  width: 100%;
+  max-width: 600px;
+}
+
+/* This is for older pages like ProjectSetup and Overview */
+.hero-scale {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 80vh;
+}
+.hero-scale .hero-panel {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-radius: 16px;
+  padding: 1.5rem;
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+  border-top: 4px solid var(--brand);
+}
+.hero-scale .hero-body {
+  text-align: left;
+  padding: 1.5rem;
+}
+.hero-scale .hero-header {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 1rem;
+}
+
+/* --- Question Pages --- */
+.progress-bar {
+  background-color: var(--brand) !important;
+}
+.question-title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 2rem;
+  color: #343a40;
+  letter-spacing: -1.5px;
+}
+.question-content .form-control {
+  font-size: 2rem;
+  font-weight: 700;
+  border: 0;
+  border-bottom: 3px solid #dee2e6;
+  border-radius: 0;
+  box-shadow: none !important;
+  padding: 0.75rem 0;
+  max-width: 600px;
+}
+.question-content .form-control:focus {
+  border-bottom-color: var(--brand);
+}
+
+.btn-success {
+  background-color: var(--brand);
+  border-color: var(--brand);
+  color: #ffffff;
+}
+.btn-success:hover, .btn-success:focus {
+  background-color: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+/* --- Logo Cloud --- */
+.logo-cloud {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.logo-cloud h3 {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+.logo-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+.client-logo {
+  height: 30px;
+  opacity: 0.6;
+}
+
+/* 7. App Layout (`App.jsx`) */
+.app-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr; /* Fixed input column, flexible results column */
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Stack on smaller screens */
+@media (max-width: 1200px) {
+  .hero-section {
+    gap: 3rem;
+    padding: 3rem 1.5rem;
+  }
+}
+@media (max-width: 992px) {
+  .hero-section { grid-template-columns: 1fr; text-align: center; }
+  .hero-mockup { display: none; }
+  .hero-actions { justify-content: center; }
+  .app-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Remove default card padding since we added it above */
+.card-body {
+  padding: 0;
+}
+
+/* Animation */
+.fade-scale {
+  animation: fadeScaleIn 420ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+@keyframes fadeScaleIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Summary panel (right column) uses a softer bubble variant */
+.hero-summary {
+  background: var(--page-bg); /* Use neutral page background */
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem; /* slightly bigger */
+}
+
+/* --- Overview Page --- */
+.overview-container {
+  padding-bottom: 4rem;
+}
+
+.overview-content {
+  max-width: 800px;
+  margin: 2rem auto 0 auto;
+  text-align: center;
+}
+
+.overview-card {
+  text-align: left;
+}
+
+.overview-item {
+  background-color: var(--page-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.read-view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-view .form-label {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Project Manager Grid --- */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.project-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 24px; /* "No edges" / very rounded look */
+  padding: 2rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--brand);
+}
+
+.project-card.active {
+  border: 2px solid var(--brand);
+  background-color: #f0fdf4; /* Light green tint */
+}
+
+.project-card.new-project {
+  border-style: dashed;
+  color: var(--text-secondary);
+}
+
+.project-card {
+  position: relative; /* Needed for positioning the delete button */
+}
+
+.btn-delete-project {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background-color: #e9ecef;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+  z-index: 2;
+}
+
+.project-card:hover .btn-delete-project {
+  opacity: 1;
+}
+
+.btn-delete-project:hover {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* --- Pricing Section --- */
+.pricing-section {
+  padding: 5rem 2rem;
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pricing-section h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.pricing-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.pricing-card.recommended {
+  border: 2px solid var(--brand);
+  position: relative;
+  box-shadow: var(--shadow-md);
+  transform: scale(1.03);
+}
+
+.recommended-badge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--brand);
+  color: #fff;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.pricing-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.pricing-card .price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.pricing-card .price .price-period {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-left: 0.5rem;
+}
+
+.pricing-card .price-annual {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.pricing-card .price-desc {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  min-height: 40px;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.features-list li {
+  margin-bottom: 1rem;
+}
+
+.pricing-card .btn {
+  padding: 0.75rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .pricing-card.recommended {
+    transform: scale(1);
+  }
+}
+
+/* --- Profile Dropdown --- */
+.profile-dropdown-container {
+  position: relative;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 250px;
+  z-index: 1050;
+  border-radius: var(--radius);
+  background-color: #fff;
+  padding: 0;
+  text-align: left;
+}
+
+.profile-dropdown .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  clear: both;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.profile-dropdown .dropdown-item:hover {
+  background-color: var(--page-bg);
+}
