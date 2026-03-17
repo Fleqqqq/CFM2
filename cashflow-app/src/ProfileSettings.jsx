@@ -23,12 +23,12 @@ export default function ProfileSettings({ user, onUpdateUser, onClose, onDeleteA
   };
 
   return (
-    <div className="app-container">
+    <>
       <nav className="top-nav">
-        <a href="#" className="nav-logo" onClick={(e) => { e.preventDefault(); onClose(); }}>Revion</a>
+        <a href="#" className="nav-logo" onClick={(e) => { e.preventDefault(); onClose(); }}>Rahanto</a>
       </nav>
       <main className="p-4 mx-auto" style={{maxWidth: '600px'}}>
-        <div className="card border-0 shadow-sm fade-scale">
+        <div className="card border-0 shadow-sm fade-scale" style={{ borderRadius: '16px', overflow: 'hidden' }}>
           <div className="card-body p-5">
             <h2 className="mb-4">{t.profileSettings}</h2>
             {error && <div className="alert alert-danger">{error}</div>}
@@ -68,6 +68,6 @@ export default function ProfileSettings({ user, onUpdateUser, onClose, onDeleteA
           </div>
         </div>
       </main>
-    </div>
+    </>
   );
 }

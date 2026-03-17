@@ -1,112 +1,81 @@
-import { useState, useEffect } from 'react';
-
-const API_URL = 'http://localhost:3000/api'; // Your backend URL
-const USE_BACKEND = false; // Set to true to use real API
-
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+import { supabase } from './supabase.js';
 
 export const api = {
   async login(email, password) {
-    if (!USE_BACKEND) {
-      await delay(500); // Simulate network delay
-      const accounts = JSON.parse(localStorage.getItem('accounts') || '[]');
-      const account = accounts.find(acc => acc.email.toLowerCase() === email.toLowerCase() && acc.password === password);
-      if (!account) throw new Error('Invalid email or password');
-      return { user: { name: account.name, email: account.email, isPremium: account.isPremium || false }, token: 'mock-jwt-token' };
-    }
+    const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw new Error(error.message);
 
-    const res = await fetch(`${API_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) throw new Error('Login failed');
-    return res.json();
+    const user = {
+      id: authData.user.id,
+      name: authData.user.user_metadata?.name || email.split('@')[0],
+      email: authData.user.email,
+      isPremium: authData.user.app_metadata?.is_premium || false,
+    };
+
+    return { user, token: authData.session.access_token };
   },
 
   async signup(email, password) {
-    if (!USE_BACKEND) {
-      await delay(500);
-      const accounts = JSON.parse(localStorage.getItem('accounts') || '[]');
-      if (accounts.some(acc => acc.email.toLowerCase() === email.toLowerCase())) throw new Error('Account already exists');
-      
-      const newAccount = { email: email.toLowerCase(), password, name: email.split('@')[0], isPremium: false };
-      accounts.push(newAccount);
-      localStorage.setItem('accounts', JSON.stringify(accounts));
-      return { user: { name: newAccount.name, email: newAccount.email, isPremium: newAccount.isPremium }, token: 'mock-jwt-token' };
+    const { data: authData, error } = await supabase.auth.signUp({ email, password });
+    if (error) throw new Error(error.message);
+    if (authData.user && authData.user.identities && authData.user.identities.length === 0) {
+      throw new Error('An account with this email already exists.');
     }
-
-    const res = await fetch(`${API_URL}/auth/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) throw new Error('Signup failed');
-    return res.json();
+    const user = {
+      id: authData.user.id,
+      name: email.split('@')[0],
+      email,
+      isPremium: false
+    };
+    return { user, token: authData.session?.access_token };
   },
 
   async upgradeToPremium(email) {
-    if (!USE_BACKEND) {
-      await delay(300);
-      const accounts = JSON.parse(localStorage.getItem('accounts') || '[]');
-      const accountIndex = accounts.findIndex(acc => acc.email.toLowerCase() === email.toLowerCase());
-      if (accountIndex === -1) throw new Error('Account not found');
-      
-      const account = accounts[accountIndex];
-      account.isPremium = true;
-      localStorage.setItem('accounts', JSON.stringify(accounts));
-      return { name: account.name, email: account.email, isPremium: account.isPremium };
-    }
-    // Backend implementation would go here
+    return { name: email.split('@')[0], email, isPremium: true };
   },
 
   async getProjects(user) {
-    if (!USE_BACKEND) {
-      await delay(300);
-      const stored = localStorage.getItem(`projects_${user.email}`);
-      return stored ? JSON.parse(stored) : [];
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('user_email', user.email);
+    if (error) {
+      console.error('getProjects error:', error);
+      return [];
     }
-
-    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-    const res = await fetch(`${API_URL}/projects`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error('Failed to fetch projects');
-    return res.json();
+    const projects = data.map(p => JSON.parse(p.data));
+    console.log('Loaded projects:', projects);
+    return projects;
   },
 
   async saveProjects(user, projects) {
-    if (!USE_BACKEND) {
-      localStorage.setItem(`projects_${user.email}`, JSON.stringify(projects));
-      return;
+    await supabase.from('projects').delete().eq('user_email', user.email);
+    for (const project of projects) {
+      const { error } = await supabase.from('projects').insert({
+        project_id: project.id,
+        user_email: user.email,
+        data: JSON.stringify(project)
+      });
+      if (error) console.error('Save error:', error);
     }
-
-    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-    // Example: Bulk save. In a real app, you might save individual projects.
-    await fetch(`${API_URL}/projects/sync`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` 
-      },
-      body: JSON.stringify(projects)
-    });
   },
-  
+
   async deleteAccount(email) {
-    if (!USE_BACKEND) {
-        const accounts = JSON.parse(localStorage.getItem('accounts') || '[]');
-        const updatedAccounts = accounts.filter(acc => acc.email.toLowerCase() !== email.toLowerCase());
-        localStorage.setItem('accounts', JSON.stringify(updatedAccounts));
-        localStorage.removeItem(`projects_${email}`);
-        localStorage.removeItem(`activeProjectId_${email}`);
-        return;
+    // 1. Delete user data
+    const { error: dataError } = await supabase.from('projects').delete().eq('user_email', email);
+    if (dataError) throw new Error(dataError.message);
+
+    // 2. Delete user auth account via RPC
+    const { error: rpcError } = await supabase.rpc('delete_user');
+    if (rpcError) {
+      console.error("RPC delete_user failed. You likely still need to run the SQL query from your Supabase Dashboard to enable full Auth deletion.", rpcError);
     }
-    
-    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-    await fetch(`${API_URL}/user`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+  },
+
+  async resetPassword(email) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://rahanto.fi/reset-password'
     });
-  }
+    if (error) throw new Error(error.message);
+  },
 };

@@ -31,14 +31,14 @@ export default function Overview({ project, onUpdateProject, onContinue, onHome,
   return (
     <div className="overview-container">
       <nav className="top-nav">
-        <a href="#" className="nav-logo" onClick={(e) => { e.preventDefault(); onHome && onHome(); }} title="Go to Front Page">Revion</a>
+        <a href="#" className="nav-logo" onClick={(e) => { e.preventDefault(); onHome && onHome(); }} title="Go to Front Page">Rahanto</a>
       </nav>
       <main className="overview-content fade-scale">
         <h1 className="mb-3">{t.overview.title || 'Overview'}</h1>
         <p className="text-secondary mb-4" style={{maxWidth: '500px', margin: '0 auto 1.5rem auto', textAlign: 'center'}}>
           {t.overview.confirmDetails}
         </p>
-        <div className="card overview-card">
+        <div className="card overview-card" style={{ borderRadius: '16px', overflow: 'hidden', border: 'none', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
           <div className="card-body p-4">
             <div className="row g-3">
             {sections.map(s => (
@@ -64,7 +64,7 @@ export default function Overview({ project, onUpdateProject, onContinue, onHome,
                     <div className="read-view w-100 align-items-start">
                       <div>
                         <div className="text-secondary small fw-bold text-uppercase">{s.label}</div>
-                        <div className="h5 mb-0 mt-1 text-dark">{String(project[s.key] ?? '—')}</div>
+                        <div className="h5 mb-0 mt-1 fw-bold">{String(project[s.key] ?? '—')}</div>
                       </div>
                       <button className="btn btn-sm btn-link text-decoration-none" onClick={() => startEdit(s.key)}>{t.edit || 'Edit'}</button>
                     </div>
